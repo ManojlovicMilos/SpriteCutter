@@ -1,0 +1,13 @@
+<vui-sidebar width="4rem">
+    <vui-view width="100%" flexDirection="column" alignItems="center" padding="0.5rem 0">
+        @for (entry of navData; track entry.name) {
+            <vui-icon
+                size="xl"
+                [icon]="entry.icon"
+                [actionable]="true"
+                [color]="entry.path === activePath ? 'var(--vui-color-primary)' : 'white'"
+                (click)="onNavigate(entry.path)">
+            </vui-icon>
+        }
+    </vui-view>
+</vui-sidebar>

@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Home",
+        "path": "",
+        "icon": "home-view"
+    },
+    {
+        "name": "Image Cutter",
+        "path": "image-cutter",
+        "icon": "image-cutter"
+    }
+]

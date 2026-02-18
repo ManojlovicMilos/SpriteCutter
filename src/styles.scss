@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comforter+Brush&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@200;400;500;600;700&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-family: 'Jost', sans-serif;
+
+    * {
+        scrollbar-width: none;
+    }
+}
+
+.centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
