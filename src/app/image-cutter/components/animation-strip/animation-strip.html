@@ -1,0 +1,11 @@
+<vui-card class="animation-strip" cardStyle="background" [hasBorder]="true">
+    <vui-view padding="1rem" [relative]="true" width="100%">
+        <vui-text class="title" size="large">{{ title() }}</vui-text>
+        <vui-view class="fill" padding="0.5rem 0 0.25rem 0" rowGap="0.5rem" width="100%">
+            <spc-animation-strip-direction title="Top"></spc-animation-strip-direction>
+            <spc-animation-strip-direction title="Right"></spc-animation-strip-direction>
+            <spc-animation-strip-direction title="Bottom"></spc-animation-strip-direction>
+            <spc-animation-strip-direction title="Left"></spc-animation-strip-direction>
+        </vui-view>
+    </vui-view>
+</vui-card>

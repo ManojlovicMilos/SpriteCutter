@@ -1,0 +1,20 @@
+:host {
+    padding-top: 0.5rem;
+}
+
+.animation-strip {
+    width: 100%;
+    margin-top: 3rem;
+
+    ::ng-deep .card {
+        border-color: var(--vui-color-background-lighter) !important;
+    }
+
+    .title {
+        position: absolute;
+        top: -1rem;
+        left: 2rem;
+        padding: 0.375rem 0.75rem 0 0.75rem;
+        background-color: var(--vui-color-background);
+    }
+}
