@@ -1,0 +1,56 @@
+[
+    {
+        "id": "premade-lpc-lite-64",
+        "name": "LPC Character Lite (64x64)",
+        "resolution": {
+            "x": 64,
+            "y": 64
+        },
+        "directions": [
+            "North",
+            "West",
+            "South",
+            "East"
+        ],
+        "animations": [
+            { "name": "Spellcast", "length": 7 },
+            { "name": "Thrust", "length": 8 },
+            { "name": "Walk", "length": 9 },
+            { "name": "Slash", "length": 6 },
+            { "name": "Shoot", "length": 13 },
+            { "name": "Hurt", "length": 6, "directions": ["South"] }
+        ],
+        "displayDirection": "South"
+    },
+    {
+        "id": "premade-lpc-full-64",
+        "name": "LPC Character Full (64x64)",
+        "resolution": {
+            "x": 64,
+            "y": 64
+        },
+        "directions": [
+            "North",
+            "West",
+            "South",
+            "East"
+        ],
+        "animations": [
+            { "name": "Spellcast", "length": 7 },
+            { "name": "Thrust", "length": 8 },
+            { "name": "Walk", "length": 9 },
+            { "name": "Slash", "length": 6 },
+            { "name": "Shoot", "length": 13 },
+            { "name": "Hurt", "length": 6, "directions": ["South"] },
+            { "name": "Climb", "length": 6, "directions": ["North"] },
+            { "name": "Idle", "length": 2 },
+            { "name": "Sit", "length": 3 },
+            { "name": "Emote", "length": 3 },
+            { "name": "Run", "length": 8 },
+            { "name": "Combat Idle", "length": 2 },
+            { "name": "1-Handed Slash", "length": 13 },
+            { "name": "Watering", "length": 6 }
+        ],
+        "displayDirection": "South"
+    }
+]

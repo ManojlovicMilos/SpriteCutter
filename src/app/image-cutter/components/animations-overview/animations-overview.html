@@ -1,0 +1,5 @@
+<vui-view rowGap="0.5rem" width="100%" justifyContent="flex-start">
+    @for (animation of animations(); track animation.name) {
+        <spc-animation-strip [animation]="animation" [directions]="directions()" [displayDirection]="displayDirection()"></spc-animation-strip>
+    }
+</vui-view>

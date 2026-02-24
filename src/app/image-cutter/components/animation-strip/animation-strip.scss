@@ -3,18 +3,11 @@
 }
 
 .animation-strip {
-    width: 100%;
-    margin-top: 3rem;
-
-    ::ng-deep .card {
-        border-color: var(--vui-color-background-lighter) !important;
-    }
-
-    .title {
+    .expander {
         position: absolute;
-        top: -1rem;
-        left: 2rem;
-        padding: 0.375rem 0.75rem 0 0.75rem;
+        padding: 0 0.5rem;
+        top: -1.35rem;
+        right: 1rem;
         background-color: var(--vui-color-background);
     }
 }

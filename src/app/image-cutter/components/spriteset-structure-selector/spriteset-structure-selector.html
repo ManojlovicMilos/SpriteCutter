@@ -1,0 +1,23 @@
+<vui-card>
+    <vui-view padding="0.75rem" rowGap="0.5rem" width="20rem" height="12rem">
+        <vui-text>Spriteset Structure</vui-text>
+        <vui-view flexDirection="row" columnGap="0.5rem" width="100%" style="width: 100%">
+            <vui-select-input width="15rem" [formControl]="control" [options]="options()"></vui-select-input>
+            <vui-button>
+                <vui-icon icon="edit" color="white" size="button"></vui-icon>
+            </vui-button>
+        </vui-view>
+        <vui-card cardStyle="dark">
+            @let config = current();
+            <vui-view padding="0.75rem" width="18.5rem" height="6rem" justifyContent="flex-start" rowGap="0.25rem" [scrollable]="true">
+                <vui-text color="grey">Resolution: {{ config.resolution.x }}x{{ config.resolution.y }}</vui-text>
+                <vui-text color="grey">
+                    Directions ({{ config.directions.length }}): {{ config.directions.join(', ') }}
+                </vui-text>
+                <vui-view>
+                    <vui-text color="grey">Animations ({{ config.animations.length }}): {{ animationsString() }}</vui-text>
+                </vui-view>
+            </vui-view>
+        </vui-card>
+    </vui-view>
+</vui-card>

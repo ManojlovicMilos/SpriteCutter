@@ -1,11 +1,26 @@
-<vui-card class="animation-strip" cardStyle="background" [hasBorder]="true">
-    <vui-view padding="1rem" [relative]="true" width="100%">
-        <vui-text class="title" size="large">{{ title() }}</vui-text>
-        <vui-view class="fill" padding="0.5rem 0 0.25rem 0" rowGap="0.5rem" width="100%">
-            <spc-animation-strip-direction title="Top"></spc-animation-strip-direction>
-            <spc-animation-strip-direction title="Right"></spc-animation-strip-direction>
-            <spc-animation-strip-direction title="Bottom"></spc-animation-strip-direction>
-            <spc-animation-strip-direction title="Left"></spc-animation-strip-direction>
+@let animationValue = animation();
+@if (animationValue) {
+    <vui-named-group class="animation-strip" [name]="animationValue.name" textSize="large">
+        <vui-view padding="1rem" [relative]="true" width="100%" rowGap="0.5rem" style="width: 100%">
+            <div class="expander" (click)="onToggleExpand()">
+                @if (expanded()) {
+                    <vui-icon icon="caret-up" size="medium" color="white"></vui-icon>
+                } @else {
+                    <vui-icon icon="caret-down" size="medium" color="white"></vui-icon>
+                }
+            </div>
+            <spc-animation-strip-direction [title]="displayedDirection()" [animation]="animationValue"></spc-animation-strip-direction>
+            @if (expanded()) {
+                <vui-view width="100%" rowGap="0.5rem" style="width: 100%">
+                    @for (direction of nonDisplayedDirections(); track $index) {
+                        <spc-animation-strip-direction [title]="direction" [animation]="animationValue"></spc-animation-strip-direction>
+                    }
+                </vui-view>
+            } @else {
+                <vui-view flexDirection="row" justifyContent="center" width="100%" style="width: 100%" (click)="onToggleExpand()">
+                    <vui-icon icon="ellipsis" color="white" [actionable]="true"></vui-icon>
+                </vui-view>
+            }
         </vui-view>
-    </vui-view>
-</vui-card>
+    </vui-named-group>
+}

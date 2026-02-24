@@ -1,5 +1,7 @@
-import { Component, input } from '@angular/core';
 import { VynilUIModule } from 'vynil-ui';
+import { Component, input } from '@angular/core';
+
+import { AnimationConfig } from '../../../models/spriteset-config.model';
 
 @Component({
     selector: 'spc-animation-strip-direction',
@@ -10,4 +12,5 @@ import { VynilUIModule } from 'vynil-ui';
 })
 export class AnimationStripDirection {
     public title = input<string>('');
+    public animation = input<AnimationConfig>();
 }

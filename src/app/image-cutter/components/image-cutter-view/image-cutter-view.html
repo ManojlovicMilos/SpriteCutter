@@ -1,5 +1,12 @@
-<vui-view rowGap="1rem" width="100%">
-    <spc-animation-strip title="Idle"></spc-animation-strip>
-    <spc-animation-strip title="Walk"></spc-animation-strip>
-    <spc-animation-strip title="Attack"></spc-animation-strip>
+<div class="header-strip">
+    <vui-text size="large">Image Cutter</vui-text>
+</div>
+<vui-view padding="1rem 1rem" height="14rem" width="calc(100vw - 4rem)" flexDirection="row" justifyContent="flex-start" columnGap="0.75rem">
+    <spc-spriteset-structure-selector></spc-spriteset-structure-selector>
+    <spc-image-imports-list></spc-image-imports-list>
+    <spc-image-exports-panel></spc-image-exports-panel>
+</vui-view>
+<div class="separator"></div>
+<vui-view padding="1.5rem 1rem" height="calc(100vh - 15.75rem)" width="calc(100vw - 4rem)" [scrollable]="true">
+    <spc-animations-overview></spc-animations-overview>
 </vui-view>
