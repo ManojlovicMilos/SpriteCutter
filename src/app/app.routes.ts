@@ -8,7 +8,7 @@ const routes: Routes = [
         component: HomeView,
     },
     {
-        path: 'image-cutter',
+        path: 'spriteset-editor',
         component: ImageCutterView,
     },
 ];

@@ -1,5 +1,11 @@
 <vui-view rowGap="0.5rem" width="100%" justifyContent="flex-start">
-    @for (animation of animations(); track animation.name) {
-        <spc-animation-strip [animation]="animation" [directions]="directions()" [displayDirection]="displayDirection()"></spc-animation-strip>
+    @let animationImageData = animationSeparatedData();
+    @for (animation of animationConfigs(); track animation.name; let i = $index) {
+        <spc-animation-strip
+            [directions]="directions()"
+            [animationConfig]="animation"
+            [animationData]="animationImageData[i]"
+            [displayDirection]="displayDirection()">
+        </spc-animation-strip>
     }
 </vui-view>

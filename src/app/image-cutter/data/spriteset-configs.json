@@ -20,7 +20,8 @@
             { "name": "Shoot", "length": 13 },
             { "name": "Hurt", "length": 6, "directions": ["South"] }
         ],
-        "displayDirection": "South"
+        "displayDirection": "South",
+        "displayAnimation": "Walk"
     },
     {
         "id": "premade-lpc-full-64",
@@ -44,6 +45,7 @@
             { "name": "Hurt", "length": 6, "directions": ["South"] },
             { "name": "Climb", "length": 6, "directions": ["North"] },
             { "name": "Idle", "length": 2 },
+            { "name": "Jump", "length": 5 },
             { "name": "Sit", "length": 3 },
             { "name": "Emote", "length": 3 },
             { "name": "Run", "length": 8 },
@@ -51,6 +53,7 @@
             { "name": "1-Handed Slash", "length": 13 },
             { "name": "Watering", "length": 6 }
         ],
-        "displayDirection": "South"
+        "displayDirection": "South",
+        "displayAnimation": "Walk"
     }
 ]

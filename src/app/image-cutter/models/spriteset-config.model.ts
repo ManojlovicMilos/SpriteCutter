@@ -1,4 +1,5 @@
 export type AnimationConfig = {
+    id: string;
     name: string;
     length: number;
     directions?: string[];
@@ -14,4 +15,5 @@ export interface SpritesetConfig {
     directions: string[];
     animations: AnimationConfig[];
     displayDirection?: string;
+    displayAnimation?: string;
 }

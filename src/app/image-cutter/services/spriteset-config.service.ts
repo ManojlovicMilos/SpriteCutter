@@ -23,16 +23,23 @@ export class SpritesetConfigService {
     }
 
     private loadConfigs(): SpritesetConfig[] {
+        const premadeConfigsWithIds = premadeConfigs.map((config) => ({
+            ...config,
+            animations: config.animations.map((animation) => ({
+                ...animation,
+                id: animation.name.toLowerCase() + '-' + animation.length,
+            }))
+        }));
         const customConfigsData = localStorage.getItem(SPRITESET_CONFIG_KEY);
         if (customConfigsData) {
             const customConfigs = JSON.parse(customConfigsData);
             return [
-                ...premadeConfigs,
+                ...premadeConfigsWithIds,
                 ...customConfigs,
             ];
         } else {
             return [
-                ...premadeConfigs,
+                ...premadeConfigsWithIds,
             ];
         }
     }

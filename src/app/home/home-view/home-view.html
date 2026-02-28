@@ -1,3 +1,15 @@
-<vui-view padding="1.5rem 1rem" height="100vh" width="calc(100vw - 4rem)" [scrollable]="true" justifyContent="flex-start">
-    home page                
+<vui-view padding="1rem" height="100vh" width="calc(100vw - 4rem)" rowGap="1.5rem" [scrollable]="true" justifyContent="flex-start">
+    <vui-view flexDirection="row" columnGap="1rem" alignItems="flex-end">
+        <vui-text size="header3">Sprite Cutter</vui-text>
+        <vui-text size="large">v0.1.0</vui-text>
+    </vui-view>
+    <vui-card>
+        <vui-view padding="1rem" rowGap="1rem">
+            <vui-view flexDirection="row" columnGap="1rem" alignItems="center" width="100%" style="width: 100%">
+                <vui-text size="xlarge">Spriteset Editor</vui-text>
+                <vui-button (click)="onNavigate('spriteset-editor')" [lean]="true">Go To</vui-button>
+            </vui-view>
+            <img class="group-image" src="assets/images/spriteset-editor.png" />
+        </vui-view>
+    </vui-card>        
 </vui-view>

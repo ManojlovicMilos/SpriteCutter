@@ -5,8 +5,8 @@
         "icon": "home-view"
     },
     {
-        "name": "Image Cutter",
-        "path": "image-cutter",
+        "name": "Spriteset Editor",
+        "path": "spriteset-editor",
         "icon": "image-cutter"
     }
 ]

@@ -4,8 +4,9 @@
         <vui-view [relative]="true" padding="0.5rem 0.5rem 0.5rem 2.25rem" columnGap="0.5rem" flexDirection="row" justifyContent="flex-start" overflow="hidden">
             <vui-text class="title">{{ title() }}</vui-text>
             <vui-view width="100%" columnGap="0.5rem" flexDirection="row" justifyContent="flex-start" [scrollable]="true" style="width: 100%">
-                @for (image of [].constructor(animationValue.length); track $index) {
-                    <vui-image class="sprite" width="8rem" height="8rem" borderRadius="1rem"></vui-image>
+                @let allImages = images();
+                @for (image of [].constructor(animationValue.length); track $index; let i = $index) {
+                    <spc-animation-strip-image [images]="allImages" [index]="i"></spc-animation-strip-image>
                 }
             </vui-view>
         </vui-view>
