@@ -3,7 +3,7 @@ import { Component, computed, input, Signal, signal } from '@angular/core';
 
 import { AnimationConfig } from '../../models/spriteset-config.model';
 import { AnimationStripDirection } from './animation-strip-direction/animation-strip-direction';
-import { AnimationDirectionData, AnimationImageData, B64Image } from '../../models/image-import-data.model';
+import { SpritesetLayerDirection, SpritesetLayerAnimation, B64Image } from '../../models/image-import-data.model';
 
 const DEFAULT_TITLE = 'Unknown';
 
@@ -16,7 +16,7 @@ const DEFAULT_TITLE = 'Unknown';
 })
 export class AnimationStrip {
     public directions = input<string[]>();
-    public animationData = input<AnimationImageData[]>();
+    public animationData = input<SpritesetLayerAnimation[]>();
     public animationConfig = input<AnimationConfig>();
     public displayDirection = input<string | undefined>();
 
@@ -55,7 +55,7 @@ export class AnimationStrip {
             const directionsObject: { [key: string]: B64Image[][] } = {};
             this.directions()?.forEach((direction: string) => {
                 let directionImages: B64Image[][] = [];
-                this.animationData()?.forEach((animationImageData: AnimationImageData) => {
+                this.animationData()?.forEach((animationImageData: SpritesetLayerAnimation) => {
                     if (animationImageData.directions[direction]) {
                         directionImages.push(animationImageData.directions[direction].images);
                     }

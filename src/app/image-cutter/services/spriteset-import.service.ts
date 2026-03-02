@@ -4,23 +4,23 @@ import { FileSystemService } from './file-system.service';
 import { SpritesetConfigService } from './spriteset-config.service';
 import { ImageManipulationService } from './image-manipulation.service';
 import { AnimationConfig, SpritesetConfig } from '../models/spriteset-config.model';
-import { AnimationDirectionData, AnimationImageData, B64Image, ImageImportData } from '../models/image-import-data.model';
+import { SpritesetLayerDirection, SpritesetLayerAnimation, B64Image, SpritesetLayer } from '../models/image-import-data.model';
 
 @Injectable({
     providedIn: 'root',
 })
-export class ImageImportService {
+export class SpritesetImportService {
     private fileSystemService: FileSystemService = inject(FileSystemService);
     private spritesetConfigService: SpritesetConfigService = inject(SpritesetConfigService);
     private imageManipulationService: ImageManipulationService = inject(ImageManipulationService);
 
-    public importedImages: WritableSignal<ImageImportData[]>;
+    public importedImages: WritableSignal<SpritesetLayer[]>;
 
     public constructor() {
-        this.importedImages = signal([] as ImageImportData[]);
+        this.importedImages = signal([] as SpritesetLayer[]);
     }
 
-    public async findImage(): Promise<ImageImportData> {
+    public async findImage(): Promise<SpritesetLayer> {
         const file = await this.fileSystemService.openFile();
         const imageData = await this.importImage(file, this.spritesetConfigService.currentConfig());
         this.importedImages.set([
@@ -30,11 +30,11 @@ export class ImageImportService {
         return imageData;
     }
 
-    public updateImportedImages(images: ImageImportData[]): void {
+    public updateImportedImages(images: SpritesetLayer[]): void {
         this.importedImages.set(images);
     }
 
-    private async importImage(file: File, config: SpritesetConfig): Promise<ImageImportData> {
+    private async importImage(file: File, config: SpritesetConfig): Promise<SpritesetLayer> {
         const image = URL.createObjectURL(file) as B64Image;
         let yOffset = 0;
         const animationPromises = config.animations.map((animationConfig) => {
@@ -44,21 +44,25 @@ export class ImageImportService {
         });
         const animations = await Promise.all(animationPromises);
         const displayImage = this.findDisplayImage(config, animations);
+        const animationsObject: { [key: string]: SpritesetLayerAnimation } = {};
+        animations.forEach((animation: SpritesetLayerAnimation) => {
+            animationsObject[animation.animationConfig.id] = animation;
+        });
         const imageImport = {
             file,
-            image: displayImage,
-            animations,
             id: file.name,
             name: file.name,
             importConfig: config,
+            image: displayImage,
+            animations: animationsObject,
         };
         return imageImport;
     }
 
-    private findDisplayImage(config: SpritesetConfig, animations: AnimationImageData[]): B64Image {
+    private findDisplayImage(config: SpritesetConfig, animations: SpritesetLayerAnimation[]): B64Image {
         let displayAnimation;
         if (config.displayAnimation) {
-            displayAnimation = animations.find((animation: AnimationImageData) => animation.animationConfig.name === config.displayAnimation);
+            displayAnimation = animations.find((animation: SpritesetLayerAnimation) => animation.animationConfig.name === config.displayAnimation);
         }
         if (!displayAnimation) {
             displayAnimation = animations[0];
@@ -81,7 +85,7 @@ export class ImageImportService {
         config: AnimationConfig,
         globalConfig: SpritesetConfig,
         yOffset: number,
-    ): Promise<AnimationImageData> {
+    ): Promise<SpritesetLayerAnimation> {
         const directionConfigs = !!config.directions ? config.directions : globalConfig.directions;
         const directionPromises = directionConfigs.map((direction: string, index: number) => this.importDirection(
             image,
@@ -91,8 +95,8 @@ export class ImageImportService {
             globalConfig.resolution,
         ));
         const directions = await Promise.all(directionPromises);
-        let directionsObject: { [key: string]: AnimationDirectionData } = {};
-        directions.forEach((direction: AnimationDirectionData) => {
+        let directionsObject: { [key: string]: SpritesetLayerDirection } = {};
+        directions.forEach((direction: SpritesetLayerDirection) => {
             directionsObject[direction.name] = direction;
         });
         return {
@@ -107,7 +111,7 @@ export class ImageImportService {
         length: number,
         yOffset: number,
         resolution: { x: number, y: number },
-    ): Promise<AnimationDirectionData> {
+    ): Promise<SpritesetLayerDirection> {
         const imagePromises = Array.from({ length }).map((_, index) => 
             this.imageManipulationService.cropImage(
                 image,

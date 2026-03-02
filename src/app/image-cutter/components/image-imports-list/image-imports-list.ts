@@ -1,10 +1,10 @@
 import { VynilUIModule } from 'vynil-ui';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ChangeDetectorRef, Component, effect, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject, signal, Signal } from '@angular/core';
 
-import { ImageImportData } from '../../models/image-import-data.model';
-import { ImageImportService } from '../../services/image-import.service';
+import { SpritesetLayer } from '../../models/image-import-data.model';
+import { SpritesetImportService } from '../../services/spriteset-import.service';
 
 export interface ListInputEntry<T> {
     value: T;
@@ -22,19 +22,25 @@ export interface ListInputEntry<T> {
 })
 export class ImageImportsList {
     private changeDetectionRef: ChangeDetectorRef = inject(ChangeDetectorRef);
-    private imageImportService: ImageImportService = inject(ImageImportService);
+    private spritesetImportService: SpritesetImportService = inject(SpritesetImportService);
 
-    public control: FormControl<ListInputEntry<ImageImportData>[]>;
+    public isListEmpty: Signal<boolean> = signal(true);
+    public control: FormControl<ListInputEntry<SpritesetLayer>[]>;
 
     public constructor() {
-        this.control = new FormControl<ListInputEntry<ImageImportData>[]>([], { nonNullable: true })
+        this.isListEmpty = computed(() => {
+            const list = this.spritesetImportService.importedImages();
+            return list.length > 0;
+        });
+
+        this.control = new FormControl<ListInputEntry<SpritesetLayer>[]>([], { nonNullable: true })
         this.control.valueChanges
             .pipe(takeUntilDestroyed())
-            .subscribe((values: ListInputEntry<ImageImportData>[]) => this.updateValues(values));
+            .subscribe((values: ListInputEntry<SpritesetLayer>[]) => this.updateValues(values));
 
         effect(() => {
-            const importedImages: ImageImportData[] = this.imageImportService.importedImages();
-            this.control.patchValue(importedImages.map((imageImport: ImageImportData) => ({
+            const importedImages: SpritesetLayer[] = this.spritesetImportService.importedImages();
+            this.control.patchValue(importedImages.map((imageImport: SpritesetLayer) => ({
                 value: imageImport,
                 id: imageImport.id,
                 text: imageImport.name,
@@ -45,23 +51,23 @@ export class ImageImportsList {
     }
 
     public onAdd(): void {
-        this.imageImportService.findImage();
+        this.spritesetImportService.findImage();
     }
     
     public onClear(): void {
-        this.imageImportService.updateImportedImages([]);
+        this.spritesetImportService.updateImportedImages([]);
     }
     
-    private updateValues(values: ListInputEntry<ImageImportData>[]): void {
-        const currentValues = this.imageImportService.importedImages();
-        const updatedValues = values.map((value: ListInputEntry<ImageImportData>) => value.value);
+    private updateValues(values: ListInputEntry<SpritesetLayer>[]): void {
+        const currentValues = this.spritesetImportService.importedImages();
+        const updatedValues = values.map((value: ListInputEntry<SpritesetLayer>) => value.value);
         let updated = false;
         if (currentValues.length !== updatedValues.length) updated = true;
         for (let i = 0; i < currentValues.length; i++) {
             if (currentValues[i].id !== updatedValues[i].id) updated = true;
         }
         if (updated) {
-            this.imageImportService.updateImportedImages(updatedValues);
+            this.spritesetImportService.updateImportedImages(updatedValues);
         }
     }
 }

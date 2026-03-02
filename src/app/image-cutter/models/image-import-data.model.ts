@@ -2,21 +2,21 @@ import { AnimationConfig, SpritesetConfig } from "./spriteset-config.model";
 
 export type B64Image = string;
 
-export type AnimationDirectionData = {
+export type SpritesetLayerDirection = {
     name: string;
     images: B64Image[];
 }
 
-export type AnimationImageData = {
+export type SpritesetLayerAnimation = {
     animationConfig: AnimationConfig;
-    directions: { [key: string]: AnimationDirectionData };
+    directions: { [key: string]: SpritesetLayerDirection };
 }
 
-export interface ImageImportData {
+export interface SpritesetLayer {
     id: string;
     name: string;
     file: File;
     image: B64Image;
     importConfig: SpritesetConfig;
-    animations: AnimationImageData[];
+    animations: { [key: string]: SpritesetLayerAnimation };
 }

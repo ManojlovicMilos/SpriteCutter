@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+
 import premadeConfigs from "../data/spriteset-configs.json";
 import { SpritesetConfig } from '../models/spriteset-config.model';
 

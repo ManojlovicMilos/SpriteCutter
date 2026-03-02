@@ -1,12 +1,16 @@
 <vui-card>
     <vui-view padding="0.75rem" rowGap="0.5rem" height="12rem" justifyContent="flex-start">
-        <vui-text>Image Exports</vui-text>
-        <vui-view rowGap="0.25rem">
-            <vui-text size="small">Export Type</vui-text>
-            <vui-select-input [options]="options" [formControl]="control" width="15rem"></vui-select-input>
+        <vui-text>Export Settings</vui-text>
+        <vui-view columnGap="0.5rem" flexDirection="row" width="100%" style="width: 100%" alignItems="center">
+            <vui-text size="small">Export Name</vui-text>
+            <vui-input [formControl]="nameControl" width="13.75rem"></vui-input>
         </vui-view>
-        <vui-view padding="3rem 0 0 0" alignItems="flex-end" width="100%" style="width: 100%">
-            <vui-button>
+        <vui-view columnGap="0.5rem" flexDirection="row" width="100%" style="width: 100%" alignItems="center">
+            <vui-text size="small">Export Type</vui-text>
+            <vui-select-input [options]="options" [formControl]="typeControl" width="15rem"></vui-select-input>
+        </vui-view>
+        <vui-view padding="1.5rem 0 0 0" alignItems="flex-end" width="100%" style="width: 100%">
+            <vui-button (click)="onExport()">
                 <vui-view flexDirection="row" columnGap="0.5rem">
                     <vui-icon icon="add" color="white" size="button"></vui-icon>
                     <vui-text>Export</vui-text>
@@ -15,3 +19,9 @@
         </vui-view>
     </vui-view>
 </vui-card>
+<vui-message
+    [visible]="messageVisible"
+    [closeOnCurtain]="false"
+    [text]="messageText"
+    (closed)="onToggleMessage()">
+</vui-message>
