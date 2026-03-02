@@ -51,7 +51,7 @@ export class SpritesetImportService {
         const imageImport = {
             file,
             id: file.name,
-            name: file.name,
+            name: file.name.replaceAll('_', ' '),
             importConfig: config,
             image: displayImage,
             animations: animationsObject,

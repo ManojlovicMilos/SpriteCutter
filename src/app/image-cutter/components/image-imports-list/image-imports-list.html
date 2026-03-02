@@ -2,7 +2,19 @@
     <vui-view padding="0.75rem" rowGap="0.5rem" height="12rem">
         <vui-text>Spriteset Layers</vui-text>
         <vui-view flexDirection="row" columnGap="0.75rem">
-            <vui-list-input [formControl]="control" [hasControls]="true" [showImages]="true" [hasRemove]="false" width="20rem" height="9rem" emptyText="Press + to import an image."></vui-list-input>
+            <vui-list-input
+                [showImages]="true"
+                [hasRemove]="true"
+                [selectable]="true"
+                [hasControls]="true"
+                [formControl]="control"
+                [selectedValue]="selectedEntry()"
+                (selected)="onSelectEntry($event)"
+                width="20rem"
+                height="9rem"
+                padding="0"
+                emptyText="Press + to import an image.">
+            </vui-list-input>
             <vui-view rowGap="0.68rem" alignItems="stretch">
                 <vui-button (click)="onAdd()">
                     <vui-icon icon="add" color="white" size="medium"></vui-icon>
