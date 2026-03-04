@@ -1,10 +1,11 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 
-import { FileSystemService } from './file-system.service';
+import { B64Image } from '../../shared/models/b64-image.model';
+import { FileSystemService } from '../../shared/services/file-system.service';
 import { SpritesetConfigService } from './spriteset-config.service';
-import { ImageManipulationService } from './image-manipulation.service';
+import { ImageManipulationService } from '../../shared/services/image-manipulation.service';
 import { AnimationConfig, SpritesetConfig } from '../models/spriteset-config.model';
-import { SpritesetLayerDirection, SpritesetLayerAnimation, B64Image, SpritesetLayer } from '../models/image-import-data.model';
+import { SpritesetLayerDirection, SpritesetLayerAnimation, SpritesetLayer } from '../models/image-import-data.model';
 
 @Injectable({
     providedIn: 'root',

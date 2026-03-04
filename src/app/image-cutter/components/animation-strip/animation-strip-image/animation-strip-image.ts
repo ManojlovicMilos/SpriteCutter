@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { B64Image } from '../../../models/image-import-data.model';
+
+import { B64Image } from '../../../../shared/models/b64-image.model';
 
 @Component({
     selector: 'spc-animation-strip-image',

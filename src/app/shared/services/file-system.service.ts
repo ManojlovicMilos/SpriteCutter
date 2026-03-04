@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { B64Image } from '../models/image-import-data.model';
+
+import { B64Image } from '../models/b64-image.model';
 
 @Injectable({
     providedIn: 'root',
@@ -59,6 +60,10 @@ export class FileSystemService {
             }
             throw error;
         }
+    }
+
+    public convertFileToB64Image(file: File): B64Image {
+        return URL.createObjectURL(file) as B64Image;
     }
 
     public async getFileFromBase64Async(base64DataUrl: B64Image, fileName: string) {

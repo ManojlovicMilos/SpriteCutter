@@ -1,11 +1,12 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 
-import { FileSystemService } from './file-system.service';
+import { B64Image } from '../../shared/models/b64-image.model';
 import { SpritesetConfigService } from './spriteset-config.service';
 import { SpritesetImportService } from './spriteset-import.service';
-import { ImageManipulationService } from './image-manipulation.service';
+import { FileSystemService } from '../../shared/services/file-system.service';
+import { ImageManipulationService } from '../../shared/services/image-manipulation.service';
 import { AnimationConfig, SpritesetConfig } from '../models/spriteset-config.model';
-import { B64Image, SpritesetLayer, SpritesetLayerAnimation } from '../models/image-import-data.model';
+import { SpritesetLayer, SpritesetLayerAnimation } from '../models/image-import-data.model';
 
 export enum ExportType {
     Singular = 'singular',
@@ -36,7 +37,7 @@ export class SpritesetExportService {
                 await this.exportSingularImage(projectName, pathDirectoryHandle);
             }
         } else {
-            throw new Error('No output directory was selected!');
+            throw new Error('No output file or directory was selected!');
         }
     }
 

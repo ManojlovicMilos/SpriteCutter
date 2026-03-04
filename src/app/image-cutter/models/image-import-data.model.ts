@@ -1,6 +1,5 @@
+import { B64Image } from "../../shared/models/b64-image.model";
 import { AnimationConfig, SpritesetConfig } from "./spriteset-config.model";
-
-export type B64Image = string;
 
 export type SpritesetLayerDirection = {
     name: string;

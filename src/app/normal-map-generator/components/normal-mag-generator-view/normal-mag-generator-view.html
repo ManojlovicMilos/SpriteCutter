@@ -1,0 +1,25 @@
+<div class="header-strip">
+    <vui-text size="large">Normal Map Generator</vui-text>
+</div>
+@let data = generatorData();
+<vui-view padding="1rem 1rem" height="17rem" width="calc(100vw - 4rem)" flexDirection="row" justifyContent="flex-start" columnGap="0.75rem">
+    <spc-light-side-image-input type="top" title="Top" [image]="data.images.top"></spc-light-side-image-input>
+    <spc-light-side-image-input type="bottom" title="Bottom" [image]="data.images.bottom"></spc-light-side-image-input>
+    <spc-light-side-image-input type="left" title="Left" [image]="data.images.left"></spc-light-side-image-input>
+    <spc-light-side-image-input type="right" title="Right" [image]="data.images.right"></spc-light-side-image-input>
+    <spc-light-side-image-input type="mask" title="Alpha Mask (optional)" [image]="data.images.mask"></spc-light-side-image-input>
+</vui-view>
+<div class="separator">
+    <vui-view height="3rem" flexDirection="row" alignItems="center" padding="0 1rem">
+        <vui-button (click)="onGenerate()" [lean]="true">Generate</vui-button>
+    </vui-view>
+</div>
+<vui-view padding="1.5rem 1rem" height="calc(100vh - 22.25rem)" width="calc(100vw - 4rem)" [scrollable]="true">
+    <spc-generated-image-panel [image]="data.generated"></spc-generated-image-panel>
+</vui-view>
+<vui-message
+    [visible]="messageVisible"
+    [closeOnCurtain]="false"
+    [text]="messageText"
+    (closed)="onToggleMessage()">
+</vui-message>

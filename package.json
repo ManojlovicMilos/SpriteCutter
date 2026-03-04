@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "prod": "electron-builder",
     "electron": "ng build --base-href ./ && electron ."
   },
   "main": "main.ts",
@@ -40,8 +41,19 @@
     "@angular/cli": "^21.1.4",
     "@angular/compiler-cli": "^21.1.4",
     "electron": "^40.4.0",
+    "electron-builder": "^26.8.1",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
+  },
+  "build": {
+    "appId": "com.manojlo.spritecutter",
+    "linux": {
+      "target": ["AppImage"]
+    },
+    "win": {
+      "target": ["nsis", "portable"],
+      "icon": "build/icon.ico"
+    }
   }
 }

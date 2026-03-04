@@ -1,7 +1,7 @@
 import { VynilUIModule } from 'vynil-ui';
 import { Component, input } from '@angular/core';
 
-import { B64Image } from '../../../models/image-import-data.model';
+import { B64Image } from '../../../../shared/models/b64-image.model';
 import { AnimationConfig } from '../../../models/spriteset-config.model';
 import { AnimationStripImage } from '../animation-strip-image/animation-strip-image';
 

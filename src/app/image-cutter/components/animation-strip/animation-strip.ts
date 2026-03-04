@@ -1,9 +1,10 @@
 import { VynilUIModule } from 'vynil-ui';
 import { Component, computed, input, Signal, signal } from '@angular/core';
 
+import { B64Image } from '../../../shared/models/b64-image.model';
 import { AnimationConfig } from '../../models/spriteset-config.model';
+import { SpritesetLayerAnimation } from '../../models/image-import-data.model';
 import { AnimationStripDirection } from './animation-strip-direction/animation-strip-direction';
-import { SpritesetLayerDirection, SpritesetLayerAnimation, B64Image } from '../../models/image-import-data.model';
 
 const DEFAULT_TITLE = 'Unknown';
 

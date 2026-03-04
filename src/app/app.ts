@@ -1,7 +1,7 @@
 import { RouterOutlet } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { ThemeService, VynilUIModule } from 'vynil-ui';
-import { Navigation } from './global/components/navigation/navigation';
+import { Navigation } from './shared/components/navigation/navigation';
 
 const components = [
   Navigation,

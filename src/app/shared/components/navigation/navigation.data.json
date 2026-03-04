@@ -8,5 +8,10 @@
         "name": "Spriteset Editor",
         "path": "spriteset-editor",
         "icon": "image-cutter"
+    },
+    {
+        "name": "Normal Map Generator",
+        "path": "normal-map-generator",
+        "icon": "light"
     }
 ]

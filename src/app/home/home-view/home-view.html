@@ -9,7 +9,20 @@
                 <vui-text size="xlarge">Spriteset Editor</vui-text>
                 <vui-button (click)="onNavigate('spriteset-editor')" [lean]="true">Go To</vui-button>
             </vui-view>
-            <img class="group-image" src="assets/images/spriteset-editor.png" />
+            <vui-card>
+                <vui-view width="71.75rem" height="15rem" overflow="hidden">
+                    <img class="group-image" src="assets/images/spriteset-editor.png" />
+                </vui-view>
+            </vui-card>
+        </vui-view>
+    </vui-card>
+    <vui-card>
+        <vui-view padding="1rem" rowGap="1rem">
+            <vui-view flexDirection="row" columnGap="1rem" alignItems="center" width="100%" style="width: 100%">
+                <vui-text size="xlarge">Normal Map Generator</vui-text>
+                <vui-button (click)="onNavigate('normal-map-generator')" [lean]="true">Go To</vui-button>
+            </vui-view>
+            <img class="group-image" src="assets/images/normal-map-gen.png" />
         </vui-view>
     </vui-card>        
 </vui-view>

@@ -1,0 +1,20 @@
+<vui-card>
+    @let imageValue = image();
+    <vui-view padding="0.75rem" rowGap="0.5rem">
+        <vui-view flexDirection="row" alignItems="center" width="100%" style="width: 100%">
+            <vui-text>{{ title() || 'Unknown' }}</vui-text>
+            @if (imageValue) {
+                <vui-icon (click)="onRemoveImage()" [actionable]="true" icon="remove" size="button"></vui-icon>
+            }
+        </vui-view>
+        <vui-card cardStyle="dark">
+            @if (imageValue) {
+                <vui-image [url]="imageValue" width="12rem" height="12rem"></vui-image>
+            } @else {
+                <vui-view (click)="onAddImage()" width="12rem" height="12rem" alignItems="center" justifyContent="center">
+                    <vui-icon icon="add" size="xl"></vui-icon>
+                </vui-view>
+            }
+        </vui-card>
+    </vui-view>
+</vui-card>

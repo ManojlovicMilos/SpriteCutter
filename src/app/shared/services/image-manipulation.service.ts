@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { B64Image } from '../models/image-import-data.model';
+
+import { B64Image } from '../models/b64-image.model';
 
 @Injectable({
     providedIn: 'root',
@@ -76,6 +77,7 @@ export class ImageManipulationService {
 
     public async emptyImage(
         resolution: { x: number, y: number },
+        color?: string,
     ): Promise<B64Image> {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
@@ -83,6 +85,10 @@ export class ImageManipulationService {
         canvas.height = resolution.y;
         if (!ctx) {
             throw Error('No canvas context!');
+        }
+        if (color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
         return canvas.toDataURL('image/png');
     }
@@ -115,7 +121,15 @@ export class ImageManipulationService {
         return canvas.toDataURL('image/png');
     }
 
-    private imageElementFromBase64(imageData: B64Image): Promise<HTMLImageElement> {
+    public async getResolution(image: B64Image): Promise<{ x: number, y: number }> {
+        const imageElement = await this.imageElementFromBase64(image);
+        return {
+            x: imageElement.width,
+            y: imageElement.height,
+        };
+    }
+
+    public imageElementFromBase64(imageData: B64Image): Promise<HTMLImageElement> {
         return new Promise((resolve, reject) => {
             const image = new Image();
             image.src = imageData;
