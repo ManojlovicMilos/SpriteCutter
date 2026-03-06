@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 1000,
+    width: 1366,
     height: 800,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -15,7 +15,8 @@ const createWindow = () => {
     }
   });
   Menu.setApplicationMenu(null); 
-  win.loadFile(path.join(__dirname, `/dist/sprite-cutter/browser/index.html`)); 
+  win.loadFile(path.join(__dirname, `/dist/sprite-cutter/browser/index.html`));
+  //win.webContents.openDevTools();
 }
 
 app.whenReady().then(createWindow);
