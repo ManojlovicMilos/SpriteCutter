@@ -1,6 +1,7 @@
 [
     {
         "id": "premade-lpc-lite-64",
+        "type": "singular",
         "name": "LPC Character Lite (64x64)",
         "resolution": {
             "x": 64,
@@ -25,6 +26,7 @@
     },
     {
         "id": "premade-lpc-full-64",
+        "type": "singular",
         "name": "LPC Character Full (64x64)",
         "resolution": {
             "x": 64,

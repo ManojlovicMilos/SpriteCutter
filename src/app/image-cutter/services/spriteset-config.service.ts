@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 
 import premadeConfigs from "../data/spriteset-configs.json";
-import { SpritesetConfig } from '../models/spriteset-config.model';
+import { SpritesetConfig, SpritesetConfigType } from '../models/spriteset-config.model';
 
 const SPRITESET_CONFIG_KEY = 'spriteset_configs';
 const CURRENT_SPRITESET_CONFIG_KEY = 'current_spriteset_config';
@@ -26,6 +26,7 @@ export class SpritesetConfigService {
     private loadConfigs(): SpritesetConfig[] {
         const premadeConfigsWithIds = premadeConfigs.map((config) => ({
             ...config,
+            type: config.type as SpritesetConfigType,
             animations: config.animations.map((animation) => ({
                 ...animation,
                 id: animation.name.toLowerCase() + '-' + animation.length,
