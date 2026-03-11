@@ -1,0 +1,50 @@
+<vui-card>
+    <vui-view padding="0.75rem" rowGap="1rem" height="12rem" justifyContent="flex-start">
+        <vui-view height="1.5rem" flexDirection="row" alignItems="center" width="100%" style="width: 100%">
+            <vui-text>Data Structure Settings</vui-text>
+            @if (value()?.type !== 'singular') {
+                <vui-icon (click)="onToggleExpand()" [actionable]="true" [icon]="expanded ? 'caret-left' : 'caret-right'"></vui-icon>
+            }
+        </vui-view>
+        <vui-view [formGroup]="form" flexDirection="row" columnGap="1rem">
+            <vui-view rowGap="1rem">
+                <vui-view rowGap="0.5rem" width="100%" style="width: 100%">
+                    <vui-text size="small">Type</vui-text>
+                    <vui-select-input formControlName="type" [options]="exportTypeOptions"  width="14.5rem"></vui-select-input>
+                </vui-view>
+                @if (value()?.type !== 'singular') {
+                    <vui-view rowGap="0.5rem" width="100%" style="width: 100%">
+                        <vui-text size="small">File Name Structure</vui-text>
+                        <vui-select-input formControlName="fileNameStructure" [options]="fileNameStructureOptions" width="14.5rem"></vui-select-input>
+                    </vui-view>
+                }
+            </vui-view>
+            @if (expanded && value()?.type !== 'singular') {
+                <vui-view rowGap="1rem">
+                    <vui-view rowGap="0.5rem">
+                        <vui-text size="small">Animation Folder Structure</vui-text>
+                        <vui-view columnGap="0.5rem" flexDirection="row" width="100%" style="width: 100%" alignItems="center">
+                            <vui-toggle-input formControlName="animationFolders"></vui-toggle-input>
+                            <vui-select-input
+                                formControlName="animationFolderNameStructure"
+                                [options]="animationFolderNameStructureOptions"
+                                width="11rem">
+                            </vui-select-input>
+                        </vui-view>
+                    </vui-view>
+                    <vui-view rowGap="0.5rem">
+                        <vui-text size="small">Direction Folder Structure</vui-text>
+                        <vui-view columnGap="0.5rem" flexDirection="row" width="100%" style="width: 100%" alignItems="center">
+                            <vui-toggle-input formControlName="directionFolders"></vui-toggle-input>
+                            <vui-select-input
+                                formControlName="directionFolderNameStructure"
+                                [options]="directionFolderNameStructureOptions"
+                                width="11rem">
+                            </vui-select-input>
+                        </vui-view>
+                    </vui-view>
+                </vui-view>
+            }
+        </vui-view>
+    </vui-view>
+</vui-card>

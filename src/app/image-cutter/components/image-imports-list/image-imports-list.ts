@@ -4,15 +4,20 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ChangeDetectorRef, Component, computed, effect, inject, signal, Signal, WritableSignal } from '@angular/core';
 
 import { SpritesetLayer } from '../../models/image-import-data.model';
+import { LoadingService } from '../../../shared/services/loading.service';
 import { SpritesetImportService } from '../../services/spriteset-import.service';
 
 @Component({
     selector: 'spc-image-imports-list',
-    imports: [VynilUIModule, ReactiveFormsModule],
+    imports: [
+        VynilUIModule,
+        ReactiveFormsModule,
+    ],
     templateUrl: './image-imports-list.html',
     styleUrl: './image-imports-list.scss',
 })
 export class ImageImportsList {
+    private loadingService: LoadingService = inject(LoadingService);
     private changeDetectionRef: ChangeDetectorRef = inject(ChangeDetectorRef);
     private spritesetImportService: SpritesetImportService = inject(SpritesetImportService);
 
@@ -45,7 +50,9 @@ export class ImageImportsList {
     }
 
     public onAdd(): void {
+        this.loadingService.toggle(true);
         this.spritesetImportService.findImage();
+        this.loadingService.toggle(false);
     }
     
     public onClear(): void {

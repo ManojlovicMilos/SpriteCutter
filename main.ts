@@ -10,13 +10,13 @@ const createWindow = () => {
     width: 1366,
     height: 800,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'preload.ts'),
       contextIsolation: true,
     }
   });
   Menu.setApplicationMenu(null); 
   win.loadFile(path.join(__dirname, `/dist/sprite-cutter/browser/index.html`));
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
 }
 
 app.whenReady().then(createWindow);

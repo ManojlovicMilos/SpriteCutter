@@ -1,0 +1,20 @@
+<vui-card class="io-switcher-panel" cardStyle="background">
+    <vui-view
+        (click)="onChangeView('import')"
+        padding="1rem"
+        rowGap="0.25rem"
+        class="io-switcher"
+        [ngClass]="{ 'active': selectedView === 'import' }">
+        <vui-icon icon="import" size="large"></vui-icon>
+        <vui-text>Import</vui-text>
+    </vui-view>
+    <vui-view
+        (click)="onChangeView('export')"
+        padding="1rem"
+        rowGap="0.25rem"
+        class="io-switcher"
+        [ngClass]="{ 'active': selectedView === 'export' }">
+        <vui-icon icon="export" size="large"></vui-icon>
+        <vui-text>Export</vui-text>
+    </vui-view>
+</vui-card>

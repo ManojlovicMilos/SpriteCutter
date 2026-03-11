@@ -1,11 +1,11 @@
 <vui-card>
     <vui-view padding="0.75rem" rowGap="0.5rem" width="20rem" height="12rem">
-        <vui-text>Import Structure</vui-text>
+        <vui-text>Import Spriteset Structure</vui-text>
         <vui-view flexDirection="row" columnGap="0.5rem" width="100%" style="width: 100%">
-            <vui-select-input width="18.5rem" [formControl]="control" [options]="options()"></vui-select-input>
-            <!-- <vui-button>
+            <vui-select-input width="15rem" [formControl]="control" [options]="options()"></vui-select-input>
+            <vui-button class="edit-structures-button" [disabled]="true">
                 <vui-icon icon="edit" color="white" size="button"></vui-icon>
-            </vui-button> -->
+            </vui-button>
         </vui-view>
         <vui-card cardStyle="dark">
             @let config = current();

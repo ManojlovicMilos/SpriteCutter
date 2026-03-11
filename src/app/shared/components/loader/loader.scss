@@ -1,0 +1,9 @@
+@keyframes step-spin {
+  0% { transform: rotate(0deg); }
+  65% { transform: rotate(180deg); }   /* Finishes rotation at halfway point */
+  100% { transform: rotate(180deg); }  /* Stays at 180deg until the cycle restarts */
+}
+
+.spinner {
+    animation: step-spin 2s ease-in-out infinite; 
+}

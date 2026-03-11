@@ -4,13 +4,18 @@ import { B64Image } from '../../shared/models/b64-image.model';
 import { SpritesetConfigService } from './spriteset-config.service';
 import { SpritesetImportService } from './spriteset-import.service';
 import { FileSystemService } from '../../shared/services/file-system.service';
-import { ImageManipulationService } from '../../shared/services/image-manipulation.service';
 import { AnimationConfig, SpritesetConfig } from '../models/spriteset-config.model';
+import { ImageManipulationService } from '../../shared/services/image-manipulation.service';
 import { SpritesetLayer, SpritesetLayerAnimation } from '../models/image-import-data.model';
+import { IODataStructure, SpritesetConfigType } from '../models/io-data-structure-config.model';
 
-export enum ExportType {
-    Singular = 'singular',
-    Directory = 'directory',
+const DEFAULT_DATA_STRUCTURE_CONFIG: IODataStructure = {
+    type: SpritesetConfigType.DirectoryStructure,
+    animationFolders: true,
+    directionFolders: false,
+    fileNameStructure: 'animation_direction_[i]',
+    animationFolderNameStructure: 'animation',
+    directionFolderNameStructure: 'direction',
 };
 
 @Injectable({
@@ -23,17 +28,24 @@ export class SpritesetExportService {
     private imageManipulationService: ImageManipulationService = inject(ImageManipulationService);
 
     public importedImages: WritableSignal<SpritesetLayer[]>;
+    public dataStructureConfig: WritableSignal<IODataStructure>;
 
     public constructor() {
         this.importedImages = signal([] as SpritesetLayer[]);
+        this.dataStructureConfig = signal(DEFAULT_DATA_STRUCTURE_CONFIG);
     }
 
-    public async exportCurrentProject(projectName: string, exportType: ExportType): Promise<void> {
+    public updateDataConfig(value: IODataStructure): void {
+        this.dataStructureConfig.set(value);
+    }
+
+    public async exportCurrentProject(projectName: string): Promise<void> {
+        const exportType = this.dataStructureConfig().type;
         const pathDirectoryHandle = await this.fileSystemService.selectDirectory();
         if (pathDirectoryHandle) {
-            if (exportType === ExportType.Directory) {
+            if (exportType === SpritesetConfigType.DirectoryStructure) {
                 await this.exportDirectoryStructure(projectName, pathDirectoryHandle);
-            } else if (exportType === ExportType.Singular) {
+            } else if (exportType === SpritesetConfigType.SingularImage) {
                 await this.exportSingularImage(projectName, pathDirectoryHandle);
             }
         } else {
@@ -84,7 +96,13 @@ export class SpritesetExportService {
         animationLayersData: SpritesetLayerAnimation[],
         outputDirectoryHandle: FileSystemDirectoryHandle,
     ): Promise<void> {
-        const animationDirectory: FileSystemDirectoryHandle = await outputDirectoryHandle.getDirectoryHandle(config.name.toLowerCase(), { create: true });
+        const animationFoldersEnabled = this.dataStructureConfig().animationFolders;
+        let animationDirectory: FileSystemDirectoryHandle;
+        if (animationFoldersEnabled) {
+            animationDirectory = await outputDirectoryHandle.getDirectoryHandle(this.generateAnimationDirectoryName(config.name), { create: true });
+        } else {
+            animationDirectory = outputDirectoryHandle;
+        }
         const directions = config.directions || globalConfig.directions;
         for (let direction of directions) {
             const directionLayerData: B64Image[][] = [];
@@ -98,6 +116,14 @@ export class SpritesetExportService {
         }
     }
 
+    private generateAnimationDirectoryName(animationName: string): string {
+        let pattern = this.dataStructureConfig().animationFolderNameStructure;
+        pattern = pattern.replace('Animation', animationName);
+        pattern = pattern.replace('animation', animationName.toLowerCase());
+        pattern = pattern.replace('ANIMATION', animationName.toUpperCase());
+        return pattern;
+    }
+
     private async exportDirection(
         direction: string,
         resolution: { x: number, y: number },
@@ -105,15 +131,42 @@ export class SpritesetExportService {
         animationConfig: AnimationConfig,
         animationDirectoryHandle: FileSystemDirectoryHandle,
     ): Promise<void> {
+        const directionFoldersEnabled = this.dataStructureConfig().directionFolders;
+        let directionDirectory: FileSystemDirectoryHandle;
+        if (directionFoldersEnabled) {
+            directionDirectory = await animationDirectoryHandle.getDirectoryHandle(this.generateDirectionDirectoryName(direction), { create: true });
+        } else {
+            directionDirectory = animationDirectoryHandle;
+        }
         for (let i = 0; i < animationConfig.length; i++) {
-            const newFileName = animationConfig.name.toLowerCase() + '_' + direction.toLowerCase() + '_' + i + '.png';
+            const newFileName = this.generateFileName(animationConfig.name, direction, i);
             let imagesToCombine = [];
             for (let j = 0; j < directionImages.length; j++) {
                 imagesToCombine.push(directionImages[j][i]);
             }
             const outputImage = await this.imageManipulationService.combineImages(imagesToCombine, resolution);
-            await this.exportImage(outputImage, newFileName, animationDirectoryHandle);
+            await this.exportImage(outputImage, newFileName, directionDirectory);
         }
+    }
+
+    private generateDirectionDirectoryName(directionName: string): string {
+        let pattern = this.dataStructureConfig().directionFolderNameStructure;
+        pattern = pattern.replace('Direction', directionName);
+        pattern = pattern.replace('direction', directionName.toLowerCase());
+        pattern = pattern.replace('DIRECTION', directionName.toUpperCase());
+        return pattern;
+    }
+
+    private generateFileName(animationName: string, directionName: string, index: number): string {
+        let pattern = this.dataStructureConfig().fileNameStructure;
+        pattern = pattern.replace('Animation', animationName);
+        pattern = pattern.replace('animation', animationName.toLowerCase());
+        pattern = pattern.replace('ANIMATION', animationName.toUpperCase());
+        pattern = pattern.replace('Direction', directionName);
+        pattern = pattern.replace('direction', directionName.toLowerCase());
+        pattern = pattern.replace('DIRECTION', directionName.toUpperCase());
+        pattern = pattern.replace('[i]', index.toString());
+        return pattern + '.png';
     }
 
     private async exportImage(

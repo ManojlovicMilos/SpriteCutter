@@ -28,7 +28,7 @@ export class AnimationStrip {
 
     public constructor() {
         this.displayedDirection = computed(() => {
-            const directions = this.directions();
+            const directions = this.animationConfig()?.directions || this.directions();
             const displayDirection = this.displayDirection();
             const animationConfigValue = this.animationConfig();
             if (animationConfigValue?.directions) {
@@ -54,7 +54,8 @@ export class AnimationStrip {
         });
         this.imageDataPerDirection = computed(() => {
             const directionsObject: { [key: string]: B64Image[][] } = {};
-            this.directions()?.forEach((direction: string) => {
+            const directions = this.animationConfig()?.directions || this.directions();
+            directions?.forEach((direction: string) => {
                 let directionImages: B64Image[][] = [];
                 this.animationData()?.forEach((animationImageData: SpritesetLayerAnimation) => {
                     if (animationImageData.directions[direction]) {

@@ -1,0 +1,14 @@
+.io-switcher-panel {
+    ::ng-deep .card {
+        overflow: hidden;
+        border-radius: 1rem 0 0 1rem;
+        border: 2px solid var(--vui-color-background-lighter);
+        border-width: 2px 0 2px 2px;
+    }
+
+    .io-switcher.active {
+        ::ng-deep .view {
+            background-color: var(--vui-color-primary-darker);
+        }
+    }
+}

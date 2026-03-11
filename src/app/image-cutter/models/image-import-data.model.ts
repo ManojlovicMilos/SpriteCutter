@@ -14,7 +14,6 @@ export type SpritesetLayerAnimation = {
 export interface SpritesetLayer {
     id: string;
     name: string;
-    file: File;
     image: B64Image;
     importConfig: SpritesetConfig;
     animations: { [key: string]: SpritesetLayerAnimation };

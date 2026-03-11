@@ -1,38 +1,162 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 
 import { B64Image } from '../../shared/models/b64-image.model';
-import { FileSystemService } from '../../shared/services/file-system.service';
 import { SpritesetConfigService } from './spriteset-config.service';
-import { ImageManipulationService } from '../../shared/services/image-manipulation.service';
+import { LoadingService } from '../../shared/services/loading.service';
+import { FileSystemService } from '../../shared/services/file-system.service';
 import { AnimationConfig, SpritesetConfig } from '../models/spriteset-config.model';
+import { ImageManipulationService } from '../../shared/services/image-manipulation.service';
+import { IODataStructure, SpritesetConfigType } from '../models/io-data-structure-config.model';
 import { SpritesetLayerDirection, SpritesetLayerAnimation, SpritesetLayer } from '../models/image-import-data.model';
+
+const DEFAULT_DATA_STRUCTURE_CONFIG: IODataStructure = {
+    type: SpritesetConfigType.SingularImage,
+    animationFolders: true,
+    directionFolders: false,
+    fileNameStructure: 'animation_direction_[i]',
+    animationFolderNameStructure: 'animation',
+    directionFolderNameStructure: 'direction',
+};
 
 @Injectable({
     providedIn: 'root',
 })
 export class SpritesetImportService {
+    private loadingService: LoadingService = inject(LoadingService);
     private fileSystemService: FileSystemService = inject(FileSystemService);
     private spritesetConfigService: SpritesetConfigService = inject(SpritesetConfigService);
     private imageManipulationService: ImageManipulationService = inject(ImageManipulationService);
 
     public importedImages: WritableSignal<SpritesetLayer[]>;
+    public dataStructureConfig: WritableSignal<IODataStructure>;
 
     public constructor() {
         this.importedImages = signal([] as SpritesetLayer[]);
+        this.dataStructureConfig = signal(DEFAULT_DATA_STRUCTURE_CONFIG);
+    }
+
+    public updateDataConfig(value: IODataStructure): void {
+        this.dataStructureConfig.set(value);
     }
 
     public async findImage(): Promise<SpritesetLayer> {
-        const file = await this.fileSystemService.openFile();
-        const imageData = await this.importImage(file, this.spritesetConfigService.currentConfig());
-        this.importedImages.set([
-            ...this.importedImages(),
-            imageData,
-        ])
-        return imageData;
+        const type = this.dataStructureConfig().type;
+        if (type === SpritesetConfigType.SingularImage) {
+            const file = await this.fileSystemService.openFile();
+            const imageData = await this.importImage(file, this.spritesetConfigService.currentConfig());
+            this.importedImages.set([
+                ...this.importedImages(),
+                imageData,
+            ]);
+            return imageData;
+        } else {
+            const pathDirectoryHandle = await this.fileSystemService.selectDirectory();
+            const newLayer = await this.importDirectory(pathDirectoryHandle, this.spritesetConfigService.currentConfig());
+            this.importedImages.set([
+                ...this.importedImages(),
+                newLayer,
+            ]);
+            return newLayer;
+        }
     }
 
     public updateImportedImages(images: SpritesetLayer[]): void {
         this.importedImages.set(images);
+    }
+
+    private async importDirectory(directory: FileSystemDirectoryHandle, config: SpritesetConfig): Promise<SpritesetLayer> {
+        const animationFoldersEnabled = this.dataStructureConfig().animationFolders;
+        let animations = [];
+        let animationLayerData: { [key: string]: SpritesetLayerAnimation } = {};
+        for (let animation of config.animations) {
+            let animationDirectory: FileSystemDirectoryHandle;
+            if (animationFoldersEnabled) {
+                animationDirectory = await directory.getDirectoryHandle(this.generateAnimationDirectoryName(animation.name), { create: false });
+            } else {
+                animationDirectory = directory;
+            }
+            const newAnimationData = await this.importAnimationDirectory(animationDirectory, config, animation);
+            animations.push(newAnimationData);
+            animationLayerData[animation.id] = newAnimationData;
+        }
+        const displayImage = this.findDisplayImage(config, animations);
+        const output: SpritesetLayer = {
+            id: directory.name,
+            name: directory.name.replaceAll('_', ' '),
+            image: displayImage,
+            importConfig: config,
+            animations: animationLayerData,
+        };
+        return output;
+    }
+
+    private generateAnimationDirectoryName(animationName: string): string {
+        let pattern = this.dataStructureConfig().animationFolderNameStructure;
+        pattern = pattern.replace('Animation', animationName);
+        pattern = pattern.replace('animation', animationName.toLowerCase());
+        pattern = pattern.replace('ANIMATION', animationName.toUpperCase());
+        return pattern;
+    }
+
+    private async importAnimationDirectory(directory: FileSystemDirectoryHandle, config: SpritesetConfig, animation : AnimationConfig): Promise<SpritesetLayerAnimation> {
+        const directionFoldersEnabled = this.dataStructureConfig().directionFolders;
+        let directionLayerData: { [key: string]: SpritesetLayerDirection } = {};
+        const directions = animation.directions || config.directions;
+        for (let direction of directions) {
+            let directionDirectory: FileSystemDirectoryHandle;
+            if (directionFoldersEnabled) {
+                directionDirectory = await directory.getDirectoryHandle(this.generateDirectionDirectoryName(direction), { create: false });
+            } else {
+                directionDirectory = directory;
+            }
+            const newDirectionData = await this.importDirectionDirectory(directionDirectory, config, animation, direction);
+            directionLayerData[direction] = newDirectionData;
+        }
+        return {
+            animationConfig: animation,
+            directions: directionLayerData,
+        };
+    }
+
+    private generateDirectionDirectoryName(directionName: string): string {
+        let pattern = this.dataStructureConfig().directionFolderNameStructure;
+        pattern = pattern.replace('Direction', directionName);
+        pattern = pattern.replace('direction', directionName.toLowerCase());
+        pattern = pattern.replace('DIRECTION', directionName.toUpperCase());
+        return pattern;
+    }
+
+    private async importDirectionDirectory(directory: FileSystemDirectoryHandle, config: SpritesetConfig, animation: AnimationConfig, direction: string): Promise<SpritesetLayerDirection> {
+        let imageData = [];
+        for (let i = 0; i < animation.length; i++) {
+            const fileName = this.generateFileName(animation.name, direction, i);
+            const exists = await this.fileSystemService.checkFileExists(directory, fileName);
+            if (exists) {
+                const fileHandle = await directory.getFileHandle(fileName, { create: false });
+                const file = await fileHandle.getFile();
+                const image = this.fileSystemService.convertFileToB64Image(file);
+                imageData.push(image);
+            } else {
+                const empty = await this.imageManipulationService.emptyImage(config.resolution);
+                imageData.push(empty);
+            }
+        }
+        return {
+            name: direction,
+            images: imageData,
+        };
+    }
+
+    private generateFileName(animationName: string, directionName: string, index: number): string {
+        let pattern = this.dataStructureConfig().fileNameStructure;
+        pattern = pattern.replace('Animation', animationName);
+        pattern = pattern.replace('animation', animationName.toLowerCase());
+        pattern = pattern.replace('ANIMATION', animationName.toUpperCase());
+        pattern = pattern.replace('Direction', directionName);
+        pattern = pattern.replace('direction', directionName.toLowerCase());
+        pattern = pattern.replace('DIRECTION', directionName.toUpperCase());
+        pattern = pattern.replace('[i]', index.toString());
+        return pattern + '.png';
     }
 
     private async importImage(file: File, config: SpritesetConfig): Promise<SpritesetLayer> {
@@ -50,7 +174,6 @@ export class SpritesetImportService {
             animationsObject[animation.animationConfig.id] = animation;
         });
         const imageImport = {
-            file,
             id: file.name,
             name: file.name.replaceAll('_', ' '),
             importConfig: config,

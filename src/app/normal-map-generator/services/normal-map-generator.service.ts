@@ -1,6 +1,7 @@
 import { Injectable, WritableSignal, inject, signal } from '@angular/core';
 
 import { B64Image } from '../../shared/models/b64-image.model';
+import { LoadingService } from '../../shared/services/loading.service';
 import { FileSystemService } from '../../shared/services/file-system.service';
 import { ImageManipulationService } from '../../shared/services/image-manipulation.service';
 import { NormalMapGenerationData, NormalMapGenerationInputImage } from '../models/normal-map-generation-data.model';
@@ -9,6 +10,7 @@ import { NormalMapGenerationData, NormalMapGenerationInputImage } from '../model
     providedIn: 'root',
 })
 export class NormalMapGeneratorService {
+    private loadingService: LoadingService = inject(LoadingService);
     private fileSystemService: FileSystemService = inject(FileSystemService);
     private imageManipulationService: ImageManipulationService = inject(ImageManipulationService);
 
@@ -53,6 +55,7 @@ export class NormalMapGeneratorService {
     }
 
     public async generate(): Promise <B64Image> {
+        this.loadingService.toggle(true);
         const imagesBase64Object = this.data().images;
         const imagesBase64 = [
             imagesBase64Object.top,
@@ -89,6 +92,7 @@ export class NormalMapGeneratorService {
             ...this.data(),
             generated: activeImage,
         });
+        this.loadingService.toggle(false);
         return activeImage;
     }
 

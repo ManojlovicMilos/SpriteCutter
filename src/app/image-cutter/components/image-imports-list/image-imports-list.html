@@ -19,12 +19,12 @@
                 <vui-button (click)="onAdd()">
                     <vui-icon icon="add" color="white" size="medium"></vui-icon>
                 </vui-button>
+                <vui-button [disabled]="true">
+                    <vui-icon icon="edit" color="white" size="medium"></vui-icon>
+                </vui-button>
                 <vui-button (click)="onClear()" [disabled]="!isListEmpty()">
                     <vui-icon icon="remove" color="white" size="medium"></vui-icon>
                 </vui-button>
-                <!-- <vui-button>
-                    <vui-icon icon="trash" color="white" size="medium"></vui-icon>
-                </vui-button> -->
             </vui-view>
         </vui-view>
     </vui-view>

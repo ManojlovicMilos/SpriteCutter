@@ -3,10 +3,8 @@
   "version": "0.1.0",
   "scripts": {
     "ng": "ng",
-    "start": "electron-forge start",
-    "build": "ng build",
-    "browser": "ng serve",
-    "watch": "ng build --watch --configuration development",
+    "start": "ng serve",
+    "prod": "ng build --configuration production",
     "electron": "ng build --base-href ./ && electron .",
     "package": "electron-forge package",
     "make": "electron-forge make"

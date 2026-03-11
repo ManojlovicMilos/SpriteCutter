@@ -1,7 +1,10 @@
 import { RouterOutlet } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { ThemeService, VynilUIModule } from 'vynil-ui';
+
+import { Loader } from './shared/components/loader/loader';
 import { Navigation } from './shared/components/navigation/navigation';
+import { LoadingService } from './shared/services/loading.service';
 
 const components = [
   Navigation,
@@ -10,6 +13,7 @@ const components = [
 @Component({
   selector: 'spc-root',
   imports: [
+    Loader,
     RouterOutlet,
     VynilUIModule,
     ...components,
@@ -19,6 +23,9 @@ const components = [
 })
 export class App {
   private themeService: ThemeService = inject(ThemeService);
+  private loadingService: LoadingService = inject(LoadingService);
+
+  public loading = this.loadingService.isLoading;
 
   public constructor() {
     this.themeService.updateTheme({
